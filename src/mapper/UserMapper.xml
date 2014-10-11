@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userMapper">
+    
+    <resultMap type="User" id="userMap">
+		<id column="id" property="id"/>
+<!-- 	<result column="did" property="deviceID"/> -->
+		<result column="weight" property="weight"/>
+		<result column="stride" property="stride"/>
+		<result column="sleep_begin" property="sleepBegin"/>
+		<result column="sleep_end" property="sleepEnd"/>
+		<result column="step_goal" property="stepGoal"/>
+		
+		<result column="step_sum" property="stepSum"/>
+		<result column="distance_sum" property="distanceSum"/>
+		<result column="calorie_sum" property="calorieSum"/>
+		<!-- <association column="did" property="deviceID" select="did" /> -->
+	</resultMap>
+	
+    <select id="did" parameterType="string" resultType="string">
+        select did from jbq_device where id = 
+        (select _device_id from yk_device_user where yk_user_id=#{id} )
+    </select>
+    
+   	<select id="selectUserByDevice" parameterType="string" resultMap="userMap">
+		select * from yk_user inner join jbq_user on yk_user.id = jbq_user.yk_user_id
+		where yk_user_id=
+		(select yk_user_id from yk_device_user where _device_id=
+		(select id from jbq_device where did=#{deviceID}) )
+	</select>
+	
+	<update id="updateStepSum" parameterType="string">
+	    update jbq_user set step_sum = 
+	    (select sum(step_data) as stepSum from jbq_upload inner join jbq_upload_process 
+	    on jbq_upload.id = jbq_upload_id where yk_user_id = #{userId})
+	    where yk_user_id = #{userId}
+	</update>
+	
+	<update id="updateTimeSum" parameterType="string">
+	    update jbq_user set time_sum = 
+	    (select count(*) as timeSum from jbq_upload_process where yk_user_id = #{userId})
+	    where yk_user_id = #{userId}
+	</update>
+	
+	<update id="updateDistanceSum" parameterType="string">
+	    update jbq_user set distance_sum = 
+	    (select sum(distance) as distanceSum from jbq_upload_process where yk_user_id = #{userId})
+	    where yk_user_id = #{userId}
+	</update>
+	
+	<update id="updateCalorieSum" parameterType="string">
+	    update jbq_user set calorie_sum = 
+	    (select sum(calorie) as calorieSum from jbq_upload_process where yk_user_id = #{userId})
+	    where yk_user_id = #{userId}
+	</update>
+	
+</mapper>

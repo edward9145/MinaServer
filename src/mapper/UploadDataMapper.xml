@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.itrigo.yixing.mapper.UploadDataMapper" >
+  <resultMap id="BaseResultMap" type="net.itrigo.yixing.domain.UploadData" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="userType" property="userType" jdbcType="INTEGER" />
+    <result column="systolic" property="systolic" jdbcType="DOUBLE" />
+    <result column="diastolic" property="diastolic" jdbcType="DOUBLE" />
+    <result column="pulse" property="pulse" jdbcType="DOUBLE" />
+    <result column="measureDate" property="measureDate" jdbcType="TIMESTAMP" />
+    <result column="deviceID" property="deviceID" jdbcType="VARCHAR" />
+    <result column="ts" property="ts" jdbcType="TIMESTAMP" />
+    <result column="guid" property="guid" jdbcType="VARCHAR" />
+    <result column="raw" property="raw" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, userType, systolic, diastolic, pulse, measureDate, deviceID, ts, guid, raw
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="net.itrigo.yixing.domain.UploadDataExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from uploadData
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from uploadData
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from uploadData
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="net.itrigo.yixing.domain.UploadDataExample" >
+    delete from uploadData
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="net.itrigo.yixing.domain.UploadData" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into uploadData (userType, systolic, diastolic, 
+      pulse, measureDate, deviceID, 
+      ts, guid, raw)
+    values (#{userType,jdbcType=INTEGER}, #{systolic,jdbcType=DOUBLE}, #{diastolic,jdbcType=DOUBLE}, 
+      #{pulse,jdbcType=DOUBLE}, #{measureDate,jdbcType=TIMESTAMP}, #{deviceID,jdbcType=VARCHAR}, 
+      #{ts,jdbcType=TIMESTAMP}, #{guid,jdbcType=VARCHAR}, #{raw,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="net.itrigo.yixing.domain.UploadData" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into uploadData
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userType != null" >
+        userType,
+      </if>
+      <if test="systolic != null" >
+        systolic,
+      </if>
+      <if test="diastolic != null" >
+        diastolic,
+      </if>
+      <if test="pulse != null" >
+        pulse,
+      </if>
+      <if test="measureDate != null" >
+        measureDate,
+      </if>
+      <if test="deviceID != null" >
+        deviceID,
+      </if>
+      <if test="ts != null" >
+        ts,
+      </if>
+      <if test="guid != null" >
+        guid,
+      </if>
+      <if test="raw != null" >
+        raw,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userType != null" >
+        #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="systolic != null" >
+        #{systolic,jdbcType=DOUBLE},
+      </if>
+      <if test="diastolic != null" >
+        #{diastolic,jdbcType=DOUBLE},
+      </if>
+      <if test="pulse != null" >
+        #{pulse,jdbcType=DOUBLE},
+      </if>
+      <if test="measureDate != null" >
+        #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceID != null" >
+        #{deviceID,jdbcType=VARCHAR},
+      </if>
+      <if test="ts != null" >
+        #{ts,jdbcType=TIMESTAMP},
+      </if>
+      <if test="guid != null" >
+        #{guid,jdbcType=VARCHAR},
+      </if>
+      <if test="raw != null" >
+        #{raw,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="net.itrigo.yixing.domain.UploadDataExample" resultType="java.lang.Integer" >
+    select count(*) from uploadData
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update uploadData
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.userType != null" >
+        userType = #{record.userType,jdbcType=INTEGER},
+      </if>
+      <if test="record.systolic != null" >
+        systolic = #{record.systolic,jdbcType=DOUBLE},
+      </if>
+      <if test="record.diastolic != null" >
+        diastolic = #{record.diastolic,jdbcType=DOUBLE},
+      </if>
+      <if test="record.pulse != null" >
+        pulse = #{record.pulse,jdbcType=DOUBLE},
+      </if>
+      <if test="record.measureDate != null" >
+        measureDate = #{record.measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deviceID != null" >
+        deviceID = #{record.deviceID,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ts != null" >
+        ts = #{record.ts,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.guid != null" >
+        guid = #{record.guid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.raw != null" >
+        raw = #{record.raw,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update uploadData
+    set id = #{record.id,jdbcType=INTEGER},
+      userType = #{record.userType,jdbcType=INTEGER},
+      systolic = #{record.systolic,jdbcType=DOUBLE},
+      diastolic = #{record.diastolic,jdbcType=DOUBLE},
+      pulse = #{record.pulse,jdbcType=DOUBLE},
+      measureDate = #{record.measureDate,jdbcType=TIMESTAMP},
+      deviceID = #{record.deviceID,jdbcType=VARCHAR},
+      ts = #{record.ts,jdbcType=TIMESTAMP},
+      guid = #{record.guid,jdbcType=VARCHAR},
+      raw = #{record.raw,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="net.itrigo.yixing.domain.UploadData" >
+    update uploadData
+    <set >
+      <if test="userType != null" >
+        userType = #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="systolic != null" >
+        systolic = #{systolic,jdbcType=DOUBLE},
+      </if>
+      <if test="diastolic != null" >
+        diastolic = #{diastolic,jdbcType=DOUBLE},
+      </if>
+      <if test="pulse != null" >
+        pulse = #{pulse,jdbcType=DOUBLE},
+      </if>
+      <if test="measureDate != null" >
+        measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceID != null" >
+        deviceID = #{deviceID,jdbcType=VARCHAR},
+      </if>
+      <if test="ts != null" >
+        ts = #{ts,jdbcType=TIMESTAMP},
+      </if>
+      <if test="guid != null" >
+        guid = #{guid,jdbcType=VARCHAR},
+      </if>
+      <if test="raw != null" >
+        raw = #{raw,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.itrigo.yixing.domain.UploadData" >
+    update uploadData
+    set userType = #{userType,jdbcType=INTEGER},
+      systolic = #{systolic,jdbcType=DOUBLE},
+      diastolic = #{diastolic,jdbcType=DOUBLE},
+      pulse = #{pulse,jdbcType=DOUBLE},
+      measureDate = #{measureDate,jdbcType=TIMESTAMP},
+      deviceID = #{deviceID,jdbcType=VARCHAR},
+      ts = #{ts,jdbcType=TIMESTAMP},
+      guid = #{guid,jdbcType=VARCHAR},
+      raw = #{raw,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

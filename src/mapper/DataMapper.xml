@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dataMapper">
+    
+    <resultMap type="ProcessData" id="dataMap">
+        <id column="id" property="id"/>
+		<result column="did" property="deviceID"/>
+		<result column="date_data" property="uploadDate"/>
+		<result column="sleep_data" property="sleepData"/>
+		<result column="step_data" property="stepData"/>
+		<result column="deep_sleep" property="deepSleep"/>
+		<result column="middle_sleep" property="middleSleep"/>
+		<result column="shadow_sleep" property="shadowSleep"/>
+		<result column="active" property="active"/>
+		<result column="effective_sleep" property="effectiveSleep"/>
+		<result column="effective_sleep_rate" property="effectiveSleepRate"/>
+		<result column="distance" property="distance"/>
+		<result column="calorie" property="calorie"/>
+		<result column="step_goal" property="stepGoal"/>
+		<result column="yk_user_id" property="userId"/>
+	</resultMap>
+    
+	<select id="selectData" parameterType="ProcessData" resultMap="dataMap">
+		select * from jbq_upload inner join jbq_upload_process 
+		on jbq_upload.id=jbq_upload_process.jbq_upload_id 
+		where did = #{deviceID} and DATE_FORMAT(date_data,"%Y%m%d") = DATE_FORMAT(#{uploadDate}, "%Y%m%d")
+	</select>
+	
+	<insert id="insertData" parameterType="ProcessData" useGeneratedKeys="true">
+	    insert into jbq_upload 
+	    (id, did, date_data, sleep_data, step_data, raw)
+	    values 
+	    (#{id}, #{deviceID}, #{uploadDate}, #{sleepData}, #{stepData}, #{rawDataStr})
+    </insert>
+	
+	<insert id="insertProcessData" parameterType="ProcessData" useGeneratedKeys="true">
+	    insert into jbq_upload_process 
+	    (id, jbq_upload_id, yk_user_id, deep_sleep, middle_sleep, shadow_sleep, active, effective_sleep, effective_sleep_rate,
+	    distance, calorie, step_goal) 
+	    values 
+	    (UUID(), #{id}, #{userId}, #{deepSleep}, #{middleSleep}, #{shadowSleep}, #{active}, #{effectiveSleep}, #{effectiveSleepRate},
+	    #{distance}, #{calorie}, #{stepGoal})
+    </insert>
+	
+	<update id="updateData" parameterType="ProcessData">
+		update jbq_upload
+		<set>
+		    <if test="uploadDate!=null"> date_data=#{uploadDate}, </if>
+			<if test="sleepData!=null"> sleep_data=#{sleepData}, </if>
+			<if test="stepData!=null"> step_data=#{stepData}, </if>
+			<if test="rawDataStr!=null"> raw=#{rawDataStr}, </if>
+			ts = CURRENT_TIMESTAMP,
+		</set>
+		where id=#{id}
+	</update>
+	
+	<update id="updateProcessData" parameterType="ProcessData">
+		update jbq_upload_process
+		<set>
+		    <if test="userId !=null"> yk_user_id=#{userId}, </if>
+			<if test="deepSleep!=null"> deep_sleep=#{deepSleep}, </if>
+			<if test="middleSleep!=null"> middle_sleep=#{middleSleep}, </if>
+			<if test="shadowSleep!=null"> shadow_sleep=#{shadowSleep}, </if>
+			<if test="active!=null"> active=#{active}, </if>
+			<if test="effectiveSleep!=null"> effective_sleep=#{effectiveSleep}, </if>
+			<if test="effectiveSleepRate!=null"> effective_sleep_rate=#{effectiveSleepRate}, </if>
+			<if test="distance !=null"> distance=#{distance}, </if>
+			<if test="calorie !=null"> calorie=#{calorie}, </if>
+			<if test="stepGoal !=null"> step_goal=#{stepGoal}, </if>
+		</set>
+		where jbq_upload_id=#{id}
+	</update>
+	
+</mapper>
